@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: user3
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webapp
+  namespace: user3
+spec:
+  template:
+    spec:
+      containers:
+      - name: webapp
+        image: user-app:latest
+        env:
+        - name: USER
+          value: "user3"
