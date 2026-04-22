@@ -13,7 +13,7 @@ spec:
     spec:
       containers:
       - name: webapp
-        image: user-app:latest
+        image: image: your-dockerhub/user1:latest
         env:
         - name: USER
           value: "user1"
