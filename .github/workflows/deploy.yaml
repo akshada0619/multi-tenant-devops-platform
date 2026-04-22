@@ -1,0 +1,39 @@
+name: Deploy Multi-Tenant App
+
+on:
+  push:
+    branches:
+      - main
+      - user-*
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Build Image
+      run: |
+        docker build -t ${{ secrets.DOCKER_USER }}/app:${{ github.sha }} ./app
+
+    - name: Push Image
+      run: |
+        docker push ${{ secrets.DOCKER_USER }}/app:${{ github.sha }}
+
+    - name: Deploy
+      run: |
+        kubectl set image deployment/webapp webapp=${{ secrets.DOCKER_USER }}/app:${{ github.sha }} -n user1
+
+    - name: Rollback if failed
+      run: |
+        kubectl rollout status deployment/webapp -n user1 || \
+        kubectl rollout undo deployment/webapp -n user1
+
+    - name: Kafka Event
+      run: |
+        echo '{"event":"DEPLOYED"}' | \
+        docker exec kafka kafka-console-producer \
+        --broker-list localhost:9092 \
+        --topic deploy-events
