@@ -14,12 +14,13 @@ spec:
     spec:
       containers:
       - name: webapp
-        image: IMAGE_PLACEHOLDER
+        image: app:latest
+        imagePullPolicy: Never
         ports:
         - containerPort: 3000
         env:
         - name: USER
-          value: USER_PLACEHOLDER
+          value: "user"
         resources:
           requests:
             cpu: "100m"

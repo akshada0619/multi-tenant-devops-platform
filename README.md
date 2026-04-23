@@ -1,42 +1,34 @@
-# Multi-Tenant DevOps Platform
+# Multi-Tenant DevOps Platform 🚀
 
-## 🚀 Features
-- Multi-tenant Kubernetes deployment
-- Dynamic domain mapping via Ingress
-- CI/CD with rollback
-- Kafka event-driven pipeline
-- Auto scaling (HPA)
-- Observability ready
+## Overview
+A Kubernetes-based multi-tenant platform where each user is isolated using namespaces.
 
----
+## Features
+- Multi-tenant architecture using namespaces
+- CI/CD pipeline (GitHub Actions)
+- Dockerized Node.js app
+- Kubernetes deployment (Deployment, Service, HPA, Ingress)
+- Rollback support
+- Kafka event simulation
 
-## 🛠️ Setup
+## Architecture
+- user1 → namespace user1
+- user2 → namespace user2
+- user3 → namespace user3
 
-### 1. Build App
-docker build -t your-dockerhub/app ./app
+## How to Run (Minikube)
+1. minikube start
+2. eval $(minikube docker-env)
+3. docker build -t app:latest ./App
+4. kubectl apply -f k8s/users/
+5. kubectl apply -f k8s/base/
 
-### 2. Deploy Namespaces
-kubectl apply -f k8s/users/
+## Access
+kubectl port-forward svc/webapp-service 9091:80 -n user1
+kubectl port-forward svc/webapp-service 9092:80 -n user2
+kubectl port-forward svc/webapp-service 9093:80 -n user3
 
-### 3. Deploy Base Resources
-kubectl apply -f k8s/base/
-
-### 4. Access Apps
-curl http://user1.example.com
-
----
-
-## 📈 Scaling
-kubectl get hpa -n user1
-
----
-
-## 🔁 Rollback
-kubectl rollout undo deployment/webapp -n user1
-
----
-
-## 📩 Kafka
-docker-compose up -d
-node kafka/producer.js
-bash kafka/consumer.sh
+## Output
+Hello from user1
+Hello from user2
+Hello from user3

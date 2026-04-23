@@ -2,15 +2,9 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: webapp-ingress
-  annotations:
-    cert-manager.io/cluster-issuer: "letsencrypt"
 spec:
-  tls:
-  - hosts:
-    - DOMAIN_PLACEHOLDER
-    secretName: tls-secret
   rules:
-  - host: DOMAIN_PLACEHOLDER
+  - host: user1.local
     http:
       paths:
       - path: /
